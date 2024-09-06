@@ -1,0 +1,96 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+using System.Data;
+
+
+namespace AllinOne
+{
+    public partial class SignIn : Form
+    {
+        SqlConnection con = new SqlConnection(Properties.Settings.Default.AllInOneConnectionString);
+        SqlDataAdapter da;
+        SqlCommand cmd;
+
+        public SignIn()
+        {
+            InitializeComponent();
+
+        }
+
+        private void guna2Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void guna2Panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gunasignup_Click(object sender, EventArgs e)
+        {
+            Signup sign = new Signup();
+            sign.ShowDialog();
+        }
+
+        private void gunasignin_Click(object sender, EventArgs e)
+        {
+
+            SqlDataAdapter da;
+            con.Open();
+
+            string username = guna_signin_username.Text;
+            string usernapwme = guna_signin_password.Text;
+            cmd = new SqlCommand("SELECT role FROM tblsignin WHERE User_Name = '" + username + "' AND password = '" + usernapwme + "'  ", con);
+            // cmd = new SqlCommand("SELECT *FROM tblsignin WHERE User_Name = '"+ username +"' AND  password = usernapwme", con);
+            cmd.ExecuteNonQuery();
+            da = new SqlDataAdapter(cmd);
+
+            tblsignin_DataSet ds = new tblsignin_DataSet();
+
+            da.Fill(ds);
+
+
+
+            SqlDataReader dr = cmd.ExecuteReader();
+            dr.Read();
+           
+            Dashbord dash = new Dashbord();
+            dash.ShowDialog();
+            this.Hide();
+
+
+            if (dr[4].ToString() == "admin")
+            {
+                userlogin.type = "a";
+
+            }
+            else if (dr[4].ToString() == "cashior")
+            {
+                userlogin.type = "c";
+            }
+          
+        else
+                {
+                    MessageBox.Show("please check your youser name password", "Massage", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                }
+                con.Close();
+          
+           
+        }
+    }
+}

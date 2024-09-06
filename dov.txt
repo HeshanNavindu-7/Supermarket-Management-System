@@ -1,0 +1,17 @@
+
+
+
+                string user_role ;
+                if (dr.HasRows && user_role=="admin")
+            {
+                Dashbord dash = new Dashbord();
+                dash.ShowDialog();
+                this.Hide();
+
+            }
+                else if(dr.HasRows && user_role == "user")
+            {
+                Cashior_dashbord cash = new Cashior_dashbord();
+                cash.ShowDialog();
+                this.Hide();
+            }
